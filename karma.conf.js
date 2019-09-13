@@ -5,6 +5,7 @@ const plugins = [
   'karma-babel-preprocessor',
   'karma-chai',
   'karma-chrome-launcher',
+  'karma-phantomjs-launcher',
   'karma-coverage',
   'karma-coveralls',
   'karma-mocha',
@@ -14,8 +15,24 @@ const plugins = [
 const coverageReporters = [{ type: 'text-summary' }];
 const reporters = ['mocha', 'coverage'];
 
-let browsers = ['Chrome'];
-let customLaunchers = {};
+let browsers = ['PhantomJS', 'PhantomJSCustom'];
+let customLaunchers = {
+  'PhantomJSCustom': {
+    base: 'PhantomJS',
+    options: {
+      windowName: 'purejs-window',
+      settings: {
+        webSecurityEnabled: false
+      },
+      viewportSize: {
+        width: 1920,
+        height: 1080
+      },
+      flags: ['--load-images=true'],
+      debug: true
+    }
+  }
+};
 
 if (process.env.TRAVIS) {
   browsers = ['Chrome', 'ChromeHeadless', 'ChromeHeadlessNoSandbox'];
@@ -35,7 +52,15 @@ module.exports = function(config) {
   config.set({
     basePath: '',
     frameworks: ['mocha', 'sinon-chai', 'chai'],
-    files: ['lib/purejs.min.js', 'test/**/*.js'],
+    files: [
+      'lib/purejs.min.js',
+      // 'test/cookies.spec.js',
+      // 'test/debounce.spec.js',
+      // 'test/events.spec.js',
+      // 'test/forEach.spec.js',
+      'test/scrollBehaviors.spec.js',
+      // 'test/touchable.spec.js'
+    ],
     preprocessors: {
       'lib/purejs.min.js': ['coverage'],
       'test/**/*.js': ['babel']

@@ -16,5 +16,5 @@ before(() => {
   document.body.insertAdjacentHTML('afterbegin', fixture);
 });
 after(() => {
-  document.body.removeChild(document.querySelector('#sample'));
+  document.body.removeChild(document.getElementById('sample'));
 });

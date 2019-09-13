@@ -1,27 +1,34 @@
 describe('Events behavior', () => {
   describe('onDocumentReady', () => {
     it('function should be called on document ready', done => {
-      const foo = { bar: () => {} };
-      sinon.spy(foo, 'bar');
-      purejs.events.onDocumentReady(() => {
-        foo.bar('baz');
-      });
-      foo.bar.should.have.been.calledWith('baz');
+      const fnReady = { bar: (arg) => {} };
+      const callback = () => {
+        fnReady.bar('baz');
+      };
+
+      sinon.spy(fnReady, 'bar');
+      purejs.events.onDocumentReady(callback);
+
+      fnReady.bar.should.have.been.calledWith('baz');
       done();
     });
   });
 
   describe('onResize', () => {
     it('function should be called on resize', done => {
-      const foo = { bar: () => {} };
-      sinon.spy(foo, 'bar');
-      purejs.events.onResize(() => {
-        foo.bar('baz');
-      });
+      const fnResize = { bar: () => {} };
+      const callback = () => {
+        fnResize.bar('baz');
+      };
+
+      sinon.spy(fnResize, 'bar');
+      purejs.events.onResize(callback);
       window.innerWidth = window.innerWidth - 100;
       window.dispatchEvent(new Event('resize'));
+
       setTimeout(() => {
-        foo.bar.should.have.been.calledWith('baz');
+        fnResize.bar.should.have.been.calledWith('baz');
+        window.removeEventListener('resize', callback);
         done();
       }, 150);
     });
